@@ -41,6 +41,12 @@ func (m *GoConfig) ReadConfig(fn string) error {
 		if len(s) == 0 {
 			continue
 		}		
+		if s[:2] == "//" {
+			continue
+		}
+		if s[0] == '#' {
+			continue
+		}
 		if s[:1] == "[" {
 			if s[len(s)-1:] != "]" {
 				continue

@@ -11,8 +11,10 @@ func TestGoConfig(t *testing.T) {
 bind = 5050
 
 [QUEUE_LOG]
+//this is comment
 broker = 192.168.13.86:9092,192.168.13.87:9092,192.168.13.88:9092,192.168.13.89:9092,192.168.13.90:9092,192.168.13.91:9092,192.168.13.92:9092
-filelog.dir = /home/wwwroot/service/ae/queuelog 
+#this is comment too
+filelog.dir = /home/wwwroot/service/ae/queuelog //this is not comment
 
 [STAT]
 second_limit = 60
