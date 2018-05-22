@@ -25,6 +25,20 @@ func NewGoConfig(fn string) (ret *GoConfig, e error) {
 	return ret, nil
 }
 
+func (m *GoConfig) GetAllConfig() map[string]map[string]string {
+	m.Lock()
+	defer m.Unlock()
+	ret := make(map[string]map[string]string)
+	for k,v := range m.cfgData {
+		m := make(map[string]string)
+		for k1,v1 := range v {
+			m[k1] = v1
+		}
+		ret[k] = m
+	}
+	return ret
+}
+
 func (m *GoConfig) ReadConfig(fn string) error {
 	m.Lock()
 	defer m.Unlock()
