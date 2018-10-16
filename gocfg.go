@@ -7,9 +7,12 @@ import (
 	"io/ioutil"
 	"github.com/truexf/goutil"
 	"strconv"
+	"time"
+	"os"
 )
 
 type GoConfig struct {
+	cfgFileUpdateTime time.Time
 	cfgFile string
 	cfgData map[string]map[string]string
 	sync.Mutex
@@ -23,6 +26,18 @@ func NewGoConfig(fn string) (ret *GoConfig, e error) {
 		}
 	}
 	return ret, nil
+}
+
+func (m *GoConfig) NeedReload() bool {
+	if m.cfgFile == "" {
+		return true
+	}
+
+	info,err := os.Stat(m.cfgFile)
+	if err != nil {
+		return false
+	}
+	return !info.ModTime().Equal(m.cfgFileUpdateTime)
 }
 
 func (m *GoConfig) GetAllConfig() map[string]map[string]string {
@@ -42,6 +57,13 @@ func (m *GoConfig) GetAllConfig() map[string]map[string]string {
 func (m *GoConfig) ReadConfig(fn string) error {
 	m.Lock()
 	defer m.Unlock()
+	fileInfo, statErr := os.Stat(fn)
+	if statErr != nil {
+		return statErr
+	}
+	if fileInfo.ModTime().Equal(m.cfgFileUpdateTime) {
+		return nil
+	}
 	data,err := ioutil.ReadFile(fn)
 	if err != nil {
 		return err
@@ -82,6 +104,7 @@ func (m *GoConfig) ReadConfig(fn string) error {
 		}
 	}
 	m.cfgFile = fn
+	m.cfgFileUpdateTime = fileInfo.ModTime()
 	return nil
 }
 
