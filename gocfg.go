@@ -151,8 +151,9 @@ func (m *GoConfig) Set(sec,k,v string) {
 	if secMap,ok := m.cfgData[sec]; ok {
 		secMap[k] = v
 	} else {
-		sec := make(map[string]string)
-		sec[k] = v
+		secMap := make(map[string]string)
+		secMap[k] = v
+		m.cfgData[sec] = secMap
 	}
 	return 
 }
