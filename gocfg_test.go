@@ -1,12 +1,12 @@
 package gocfg
 
 import (
-	"testing"
-	"io/ioutil"
 	"fmt"
+	"io/ioutil"
+	"testing"
 )
 
-func TestGoConfig(t *testing.T) {	
+func TestGoConfig(t *testing.T) {
 	cfgData := `[DEFAULT]
 bind = 5050
 
@@ -28,20 +28,20 @@ timeout = 50
 
 [AD]`
 	fn := "/tmp/testgoconfig"
-	ioutil.WriteFile(fn, []byte(cfgData),0666)	
-	cfg,e := NewGoConfig(fn)
+	ioutil.WriteFile(fn, []byte(cfgData), 0666)
+	cfg, e := NewGoConfig(fn)
 	if e != nil {
 		t.Errorf(e.Error())
 		return
 	}
-	fmt.Printf("dsp.data-dir: %s\n",cfg.Get("DSP","data-dir",""))
-	fmt.Printf(cfg.Get("AD","abc","124"))
-	fmt.Printf("\n%d\n",cfg.GetIntDefault("STAT","second_limit",-100))
-	fmt.Printf("%f\n",cfg.GetFloatDefault("DSP","timeout",-100.0))
-	fmt.Printf("%t\n",cfg.GetBoolDefault("DSP","id",false))
-	fmt.Printf("%t\n",cfg.GetBoolDefault("DSP","id",true))
+	fmt.Printf("dsp.data-dir: %s\n", cfg.Get("DSP", "data-dir", ""))
+	fmt.Printf(cfg.Get("AD", "abc", "124"))
+	fmt.Printf("\n%d\n", cfg.GetIntDefault("STAT", "second_limit", -100))
+	fmt.Printf("%f\n", cfg.GetFloatDefault("DSP", "timeout", -100.0))
+	fmt.Printf("%t\n", cfg.GetBoolDefault("DSP", "id", false))
+	fmt.Printf("%t\n", cfg.GetBoolDefault("DSP", "id", true))
 	cfg.SaveToFile("/tmp/testgoconfig1")
-	if d,e := ioutil.ReadFile(fn+"1"); e == nil {
+	if d, e := ioutil.ReadFile(fn + "1"); e == nil {
 		fmt.Println(string(d))
 	} else {
 		fmt.Println(e.Error())
